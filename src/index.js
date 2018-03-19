@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import 'semantic-ui-css/semantic.min.css';
 
 // Add this import:
 import { AppContainer } from 'react-hot-loader';
