@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import './App.css';
-import CompanyForm from './components/company-form';
+import CompanyPage from './components/company-page';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <CompanyForm></CompanyForm>
+        <CompanyPage></CompanyPage>
       </div>
     );
   }
