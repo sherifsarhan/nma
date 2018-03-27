@@ -2,6 +2,9 @@
 
 const Hapi = require('hapi');
 
+var contactId = 0;
+var contacts = {};
+
 const server = Hapi.server({
     port: 3001,
     host: 'localhost',
@@ -28,10 +31,20 @@ server.route({
 
 server.route({
     method: 'POST',
-    path: '/saveName',
+    path: '/addContact',
     handler: (request) => {
         console.log(request.payload);
+        contacts[contactId] = request.payload;
+        contactId++;
         return request.payload;
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/getContacts',
+    handler: () => {
+        return contacts;
     }
 });
 
