@@ -32,7 +32,7 @@ class HomePage extends Component {
                     </Menu.Item>
                 </Menu>
                 <Sidebar.Pushable as={Segment} attached="bottom">
-                    <Sidebar width='thin' as={Menu} animation="uncover" visible={this.state.menuVisible} icon="labeled" vertical inline inverted>
+                    <Sidebar width='thin' as={Menu} animation="uncover" visible={this.state.menuVisible} icon="labeled" vertical inverted>
                         <Menu.Item onClick={() => this.setView('form')}><Icon name="home" />Home</Menu.Item>
                         <Menu.Item onClick={() => this.setView('table')}><Icon name="block layout" />Topics</Menu.Item>
                         <Menu.Item><Icon name="smile" />Friends</Menu.Item>
