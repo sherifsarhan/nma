@@ -10,7 +10,7 @@ const server = Hapi.server({
 server.route({
     method: 'GET',
     path: '/',
-    handler: (request, h) => {
+    handler: () => {
 
         return 'Hello, world!';
     }
@@ -19,7 +19,7 @@ server.route({
 server.route({
     method: 'GET',
     path: '/{name}',
-    handler: (request, h) => {
+    handler: (request) => {
 
         return 'Hello, ' + encodeURIComponent(request.params.name) + '!';
     }
@@ -28,7 +28,7 @@ server.route({
 server.route({
     method: 'POST',
     path: '/saveName',
-    handler: (request, h) => {
+    handler: (request) => {
         console.log(request.payload);
         return request.payload;
     }
