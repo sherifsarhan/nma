@@ -6,7 +6,7 @@ class CompanyPage extends Component {
     render() {
         return (
             <div>
-                <Header as="h3">Name Form</Header>
+                <Header as="h3">Add Contact Form</Header>
                 <Grid padded='horizontally'>
                     <Grid.Row>
                         <Grid.Column width={8}>

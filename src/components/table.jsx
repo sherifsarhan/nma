@@ -2,19 +2,27 @@ import _ from 'lodash';
 import React from 'react';
 import { Table, Header } from 'semantic-ui-react';
 
-const tableData = [
-    { name: 'John', age: 15, gender: 'Male' },
-    { name: 'Amber', age: 40, gender: 'Female' },
-    { name: 'Leslie', age: 25, gender: 'Female' },
-    { name: 'Ben', age: 70, gender: 'Male' },
-];
-
 export default class TableExamplePagination extends React.Component {
     state = {
         column: null,
-        data: tableData,
+        data: [],
         direction: null,
     }
+    componentDidMount() {
+        fetch('http://localhost:3001/getContacts', { method: 'GET' })
+            .then((response) => { return response.json(); })
+            .then((data) => {
+                console.log(data);
+                let contacts = [];
+                _.mapValues(data, (contact) => {
+                    contacts.push(JSON.parse(contact));
+                });
+                this.setState({
+                    data: contacts
+                });
+            });
+    }
+
 
     handleSort = clickedColumn => () => {
         const { column, data, direction } = this.state;
@@ -38,7 +46,7 @@ export default class TableExamplePagination extends React.Component {
         const { column, data, direction } = this.state;
         return (
             <div>
-                <Header as="h3">Name Table</Header>
+                <Header as="h3">View Contact Table</Header>
                 <Table sortable celled fixed>
                     <Table.Header>
                         <Table.Row>
