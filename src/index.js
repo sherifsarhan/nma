@@ -8,14 +8,14 @@ import 'semantic-ui-css/semantic.min.css';
 import { AppContainer } from 'react-hot-loader';
 
 // Wrap the rendering in a function:
-const render = Component => {
-  ReactDOM.render(
-    // Wrap App inside AppContainer
-    <AppContainer>
-      <App />
-    </AppContainer>,
-    document.getElementById('root')
-  );
+const render = () => {
+    ReactDOM.render(
+        // Wrap App inside AppContainer
+        <AppContainer>
+            <App />
+        </AppContainer>,
+        document.getElementById('root')
+    );
 };
 
 // Do this once
@@ -26,7 +26,7 @@ render(App);
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
-  module.hot.accept('./App', () => {
-    render(App);
-  });
+    module.hot.accept('./App', () => {
+        render(App);
+    });
 }

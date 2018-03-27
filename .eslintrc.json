@@ -1,17 +1,26 @@
 {
-    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 6
     },
     "rules": {
-        "indent": ["error", "tab"],
-        "semi": ["error", "always"],
+        "indent": [
+            "error",
+            4
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
         "no-console": 1
     },
     "env": {
         "browser": true,
         "node": true,
         "jasmine": true
-      }
+    }
 }

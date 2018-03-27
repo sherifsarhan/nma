@@ -2,15 +2,19 @@
 
 const Hapi = require('hapi');
 
+var contactId = 0;
+var contacts = {};
+
 const server = Hapi.server({
     port: 3001,
-    host: 'localhost'
+    host: 'localhost',
+    routes: { cors: true }
 });
 
 server.route({
     method: 'GET',
     path: '/',
-    handler: (request, h) => {
+    handler: () => {
 
         return 'Hello, world!';
     }
@@ -19,7 +23,7 @@ server.route({
 server.route({
     method: 'GET',
     path: '/{name}',
-    handler: (request, h) => {
+    handler: (request) => {
 
         return 'Hello, ' + encodeURIComponent(request.params.name) + '!';
     }
@@ -27,10 +31,20 @@ server.route({
 
 server.route({
     method: 'POST',
-    path: '/saveName',
-    handler: (request, h) => {
+    path: '/addContact',
+    handler: (request) => {
         console.log(request.payload);
+        contacts[contactId] = request.payload;
+        contactId++;
         return request.payload;
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/getContacts',
+    handler: () => {
+        return contacts;
     }
 });
 
