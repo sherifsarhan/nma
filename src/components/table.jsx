@@ -1,58 +1,70 @@
+import _ from 'lodash';
 import React from 'react';
-import { Icon, Label, Menu, Table, Header } from 'semantic-ui-react';
+import { Table, Header } from 'semantic-ui-react';
 
-const TableExamplePagination = () => (
-    <div>
-        <Header as="h3">Name Table</Header>
-        <Table celled>
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>Header</Table.HeaderCell>
-                    <Table.HeaderCell>Header</Table.HeaderCell>
-                    <Table.HeaderCell>Header</Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
+const tableData = [
+    { name: 'John', age: 15, gender: 'Male' },
+    { name: 'Amber', age: 40, gender: 'Female' },
+    { name: 'Leslie', age: 25, gender: 'Female' },
+    { name: 'Ben', age: 70, gender: 'Male' },
+];
 
-            <Table.Body>
-                <Table.Row>
-                    <Table.Cell>
-                        <Label ribbon>First</Label>
-                    </Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                </Table.Row>
-            </Table.Body>
+export default class TableExamplePagination extends React.Component {
+    state = {
+        column: null,
+        data: tableData,
+        direction: null,
+    }
 
-            <Table.Footer>
-                <Table.Row>
-                    <Table.HeaderCell colSpan='3'>
-                        <Menu floated='right' pagination>
-                            <Menu.Item as='a' icon>
-                                <Icon name='chevron left' />
-                            </Menu.Item>
-                            <Menu.Item as='a'>1</Menu.Item>
-                            <Menu.Item as='a'>2</Menu.Item>
-                            <Menu.Item as='a'>3</Menu.Item>
-                            <Menu.Item as='a'>4</Menu.Item>
-                            <Menu.Item as='a' icon>
-                                <Icon name='chevron right' />
-                            </Menu.Item>
-                        </Menu>
-                    </Table.HeaderCell>
-                </Table.Row>
-            </Table.Footer>
-        </Table>
-    </div>
-);
+    handleSort = clickedColumn => () => {
+        const { column, data, direction } = this.state;
 
-export default TableExamplePagination;
+        if (column !== clickedColumn) {
+            this.setState({
+                column: clickedColumn,
+                data: _.sortBy(data, [clickedColumn]),
+                direction: 'ascending',
+            });
+
+            return;
+        }
+
+        this.setState({
+            data: data.reverse(),
+            direction: direction === 'ascending' ? 'descending' : 'ascending',
+        });
+    }
+    render() {
+        const { column, data, direction } = this.state;
+        return (
+            <div>
+                <Header as="h3">Name Table</Header>
+                <Table sortable celled fixed>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell sorted={column === 'name' ? direction : null} onClick={this.handleSort('name')}>
+                                Name
+                            </Table.HeaderCell>
+                            <Table.HeaderCell sorted={column === 'age' ? direction : null} onClick={this.handleSort('age')}>
+                                Age
+                            </Table.HeaderCell>
+                            <Table.HeaderCell sorted={column === 'gender' ? direction : null} onClick={this.handleSort('gender')}>
+                                Gender
+                            </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {_.map(data, ({ age, gender, name }) => (
+                            <Table.Row key={name}>
+                                <Table.Cell>{name}</Table.Cell>
+                                <Table.Cell>{age}</Table.Cell>
+                                <Table.Cell>{gender}</Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
+            </div>
+        );
+    }
+}
+
