@@ -5,7 +5,7 @@ import { Grid } from 'semantic-ui-react';
 class CompanyPage extends Component {
 	render() {
 		return (
-			<Grid>
+			<Grid padded='horizontally'>
 				<Grid.Row>
 					<Grid.Column width={8}>
 						<CompanyForm></CompanyForm>
