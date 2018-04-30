@@ -4,29 +4,29 @@ import { Form, Input, Button, Message, Transition, Dropdown } from 'semantic-ui-
 class CompanyForm extends Component {
     constructor(props) {
         super(props);
-        this.state = { name: '', age: '', gender: '', visible: false };
+        this.state = { companyName: '', agentId: '', segmentId: '', visible: false };
 
-        this.handleChangeName = this.handleChangeName.bind(this);
-        this.handleChangeAge = this.handleChangeAge.bind(this);
-        this.handleChangeGender = this.handleChangeGender.bind(this);
+        this.handleChangeCompanyName = this.handleChangeCompanyName.bind(this);
+        this.handleChangeAgentId = this.handleChangeAgentId.bind(this);
+        this.handleChangeSegmentId = this.handleChangeSegmentId.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChangeName(event, data) {
-        this.setState({ name: data.value });
+    handleChangeCompanyName(event, data) {
+        this.setState({ companyName: data.value });
     }
 
-    handleChangeAge(event, data) {
-        this.setState({ age: data.value });
+    handleChangeAgentId(event, data) {
+        this.setState({ agentId: data.value });
     }
 
-    handleChangeGender(event, data) {
-        this.setState({ gender: data.value });
+    handleChangeSegmentId(event, data) {
+        this.setState({ segmentId: data.value });
     }
 
     handleSubmit(event) {
         // alert('A name was submitted: ' + this.state.name + this.state.age + this.state.gender);
-        fetch('http://localhost:3001/addContact', { method: 'POST', body: JSON.stringify(this.state) })
+        fetch('http://:3001/addCompany', { method: 'POST', body: JSON.stringify(this.state) })
             .then((response) => console.log(response));
         event.preventDefault();
         this.setState({ visible: true });
@@ -39,16 +39,16 @@ class CompanyForm extends Component {
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group widths='equal'>
                         <Form.Field>
-                            <label>Name</label>
-                            <Input fluid placeholder='Name' value={this.state.name} onChange={this.handleChangeName} />
+                            <label>Company Name</label>
+                            <Input fluid placeholder='Name' value={this.state.companyName} onChange={this.handleChangeCompanyName} />
                         </Form.Field>
                         <Form.Field>
-                            <label>Age</label>
-                            <Input fluid type="number" min="0" max="200" placeholder='Age' value={this.state.age} onChange={this.handleChangeAge} />
+                            <label>Agent ID</label>
+                            <Input fluid type="number" min="0" max="200" placeholder='Agent ID' value={this.state.agentId} onChange={this.handleChangeAgentId} />
                         </Form.Field>
                         <Form.Field>
-                            <label>Gender</label>
-                            <Dropdown fluid placeholder='Gender' value={this.state.gender} selection options={genderOptions} onChange={this.handleChangeGender} />
+                            <label>Segment ID</label>
+                            <Input fluid type="number" min="0" max="200" placeholder='Segment ID' value={this.state.segmentId} onChange={this.handleChangeSegmentId} />
                         </Form.Field>
                     </Form.Group>
                     <Button type="submit" value="Submit">Submit</Button>

@@ -1,42 +1,52 @@
 'use strict';
 
 const Hapi = require('hapi');
-const mysql = require('mysql');
+const mysql = require('mysql2/promise');
+const fs = require('fs');
 
-// connect to mysql db
-// var con = mysql.createConnection({
-//     host: "localhost",
-//     user: "yourusername",
-//     password: "yourpassword"
-// });
+const conn = mysql.createConnection({
+    host: 'localhost',
+    user: '',
+    password: '',
+    schema: ''
+});
+var getCompaniesSQL = 
+`SELECT
+    idcompanies,
+    CompanyName,
+    AgentId,
+    SegmentId,
+    TypeId,
+    SubtypeId,
+    SizeId,
+    KindId,
+    ConglomerateId,
+    SalesLifeCycleStatusId,
+    Website,
+    Notes
+FROM nma.companies;`;
+function getCompanies() {
+    return conn.then((connection) => {
+        console.log("CONNECTED TO MYSQL");
+        return connection.execute(getCompaniesSQL);
+    });
+}
 
-// create db
-// con.connect(function (err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-//     con.query("CREATE DATABASE mydb", function (err, result) {
-//         if (err) throw err;
-//         console.log("Database created");
-//     });
-// });
-
-// create table
-// con.connect(function (err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-//     var sql = "CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))";
-//     con.query(sql, function (err, result) {
-//         if (err) throw err;
-//         console.log("Table created");
-//     });
-// });
+var addCompanySQL =
+`INSERT INTO nma.companies (CompanyName, AgentId, SegmentId)
+    VALUES ('Test', 3, 5);`
+function addCompany(company) {
+    return conn.then((connection) => {
+        console.log("CONNECTED TO MYSQL");
+        return connection.execute(addCompanySQL);
+    });
+}
 
 var contactId = 0;
 var contacts = {};
 
 const server = Hapi.server({
     port: 3001,
-    host: 'localhost',
     routes: { cors: true }
 });
 
@@ -53,32 +63,35 @@ server.route({
     method: 'GET',
     path: '/{name}',
     handler: (request) => {
-
+        getCompanies();
         return 'Hello, ' + encodeURIComponent(request.params.name) + '!';
     }
 });
 
 server.route({
     method: 'POST',
-    path: '/addContact',
+    path: '/addCompany',
     handler: (request) => {
         console.log(request.payload);
-        contacts[contactId] = request.payload;
-        contactId++;
+        addCompany(request.payload).then(() => {
+            console.log("add company done");
+        });
         return request.payload;
     }
 });
 
 server.route({
     method: 'GET',
-    path: '/getContacts',
+    path: '/getCompanies',
     handler: () => {
-        return contacts;
+        return getCompanies().then((companies) => {
+            console.log(companies);
+            return companies[0];
+        });
     }
 });
 
 const init = async () => {
-
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
 };
