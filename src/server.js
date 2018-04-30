@@ -2,6 +2,7 @@
 
 const Hapi = require('hapi');
 const mysql = require('mysql2/promise');
+const SQL = require('sql-template-strings');
 const fs = require('fs');
 
 const conn = mysql.createConnection({
@@ -27,17 +28,15 @@ var getCompaniesSQL =
 FROM nma.companies;`;
 function getCompanies() {
     return conn.then((connection) => {
-        console.log("CONNECTED TO MYSQL");
         return connection.execute(getCompaniesSQL);
     });
 }
 
-var addCompanySQL =
-`INSERT INTO nma.companies (CompanyName, AgentId, SegmentId)
-    VALUES ('Test', 3, 5);`
 function addCompany(company) {
+    var addCompanySQL =
+    SQL`INSERT INTO nma.companies (CompanyName, AgentId, SegmentId)
+    VALUES (${company.companyName}, ${company.agentId}, ${company.segmentId});`
     return conn.then((connection) => {
-        console.log("CONNECTED TO MYSQL");
         return connection.execute(addCompanySQL);
     });
 }
@@ -73,7 +72,7 @@ server.route({
     path: '/addCompany',
     handler: (request) => {
         console.log(request.payload);
-        addCompany(request.payload).then(() => {
+        addCompany(JSON.parse(request.payload)).then(() => {
             console.log("add company done");
         });
         return request.payload;
