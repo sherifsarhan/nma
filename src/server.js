@@ -41,8 +41,17 @@ function addCompany(company) {
     });
 }
 
-var contactId = 0;
-var contacts = {};
+var getAgentsSQL = 
+`SELECT
+    idagents,
+    AgentFirstName,
+    AgentLastName
+FROM nma.internalagents;`;
+function getAgents() {
+    return conn.then((connection) => {
+        return connection.execute(getAgentsSQL);
+    });
+}
 
 const server = Hapi.server({
     port: 3001,
@@ -86,6 +95,17 @@ server.route({
         return getCompanies().then((companies) => {
             console.log(companies);
             return companies[0];
+        });
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/getAgents',
+    handler: () => {
+        return getAgents().then((agents) => {
+            console.log(agents);
+            return agents[0];
         });
     }
 });
