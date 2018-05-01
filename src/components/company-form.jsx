@@ -4,20 +4,37 @@ import { Form, Input, Button, Message, Transition, Dropdown } from 'semantic-ui-
 class CompanyForm extends Component {
     constructor(props) {
         super(props);
-        this.state = { companyName: '', agentId: '', segmentId: '', visible: false };
+        this.state = { companyName: '', agent: '', segmentId: '', visible: false };
 
         this.handleChangeCompanyName = this.handleChangeCompanyName.bind(this);
-        this.handleChangeAgentId = this.handleChangeAgentId.bind(this);
+        this.handleChangeAgent = this.handleChangeAgent.bind(this);
         this.handleChangeSegmentId = this.handleChangeSegmentId.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.agentOptions = []
+    }
+
+    componentDidMount() {
+        fetch('http://:3001/getAgents', { method: 'GET' })
+            .then((response) => { return response.json(); })
+            .then((agents) => {
+                console.log(agents);
+                let agentOptions = [];
+                agents.forEach((agent) => {
+                    agentOptions.push({ key: agent.idagents, value: `${agent.AgentLastName}, ${agent.AgentFirstName}`, text: `${agent.AgentLastName}, ${agent.AgentFirstName}`, description: agent.idagents });
+                });
+                this.agentOptions = agentOptions;
+                this.setState({
+                    agentOptions
+                });
+            });
     }
 
     handleChangeCompanyName(event, data) {
         this.setState({ companyName: data.value });
     }
 
-    handleChangeAgentId(event, data) {
-        this.setState({ agentId: data.value });
+    handleChangeAgent(event, data) {
+        this.setState({ agent: data.value });
     }
 
     handleChangeSegmentId(event, data) {
@@ -33,7 +50,6 @@ class CompanyForm extends Component {
     }
 
     render() {
-        const genderOptions = [{ key: 'Male', value: 'Male', text: 'Male' }, { key: 'Female', value: 'Female', text: 'Female' }];
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
@@ -43,8 +59,8 @@ class CompanyForm extends Component {
                             <Input fluid placeholder='Name' value={this.state.companyName} onChange={this.handleChangeCompanyName} />
                         </Form.Field>
                         <Form.Field>
-                            <label>Agent ID</label>
-                            <Input fluid type="number" min="0" max="200" placeholder='Agent ID' value={this.state.agentId} onChange={this.handleChangeAgentId} />
+                            <label>Agent</label>
+                            <Dropdown fluid search selection options={this.agentOptions} placeholder='Agent' value={this.state.agentId} onChange={this.handleChangeAgent} />
                         </Form.Field>
                         <Form.Field>
                             <label>Segment ID</label>
@@ -55,7 +71,7 @@ class CompanyForm extends Component {
                 </Form>
                 <Transition visible={this.state.visible} animation='scale' duration={500}>
                     <Message positive>
-						Contact Submitted Successfully!
+						Company Added Successfully!
                     </Message>
                 </Transition>
             </div >
