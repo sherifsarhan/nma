@@ -9,7 +9,7 @@ export default class TableExamplePagination extends React.Component {
         direction: null,
     }
     componentDidMount() {
-        fetch('http://:3001/getCompanies', { method: 'GET' })
+        fetch('http://localhost:3001/getCompanies', { method: 'GET' })
             .then((response) => { return response.json(); })
             .then((data) => {
                 console.log(data);
