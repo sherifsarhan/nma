@@ -7,9 +7,9 @@ const fs = require('fs');
 
 const conn = mysql.createConnection({
     host: 'localhost',
-    user: '',
+    user: 'root',
     password: '',
-    schema: ''
+    schema: 'nma'
 });
 var getCompaniesSQL = 
 `SELECT
@@ -24,8 +24,12 @@ var getCompaniesSQL =
     ConglomerateId,
     SalesLifeCycleStatusId,
     Website,
-    Notes
-FROM nma.companies;`;
+    Notes,
+    agents.AgentFirstName,
+    agents.AgentLastName,
+    agents.AgentPosition
+FROM nma.companies as companies
+INNER JOIN nma.internalagents as agents ON companies.AgentId = agents.idagents;`;
 function getCompanies() {
     return conn.then((connection) => {
         return connection.execute(getCompaniesSQL);

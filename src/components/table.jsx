@@ -9,10 +9,9 @@ export default class TableExamplePagination extends React.Component {
         direction: null,
     }
     componentDidMount() {
-        fetch('http://:3001/getCompanies', { method: 'GET' })
+        fetch('http://localhost:3001/getCompanies', { method: 'GET' })
             .then((response) => { return response.json(); })
             .then((data) => {
-                console.log(data);
                 let companies = [];
                 _.mapValues(data, (company) => {
                     companies.push(company);
@@ -59,17 +58,29 @@ export default class TableExamplePagination extends React.Component {
                             <Table.HeaderCell sorted={column === 'AgentId' ? direction : null} onClick={this.handleSort('AgentId')}>
                                 AgentId
                             </Table.HeaderCell>
+                            <Table.HeaderCell sorted={column === 'AgentFirstName' ? direction : null} onClick={this.handleSort('AgentFirstName')}>
+                                Agent First Name
+                            </Table.HeaderCell>
+                            <Table.HeaderCell sorted={column === 'AgentLastName' ? direction : null} onClick={this.handleSort('AgentLastName')}>
+                                Agent Last Name
+                            </Table.HeaderCell>
+                            <Table.HeaderCell sorted={column === 'AgentPosition' ? direction : null} onClick={this.handleSort('AgentPosition')}>
+                                Agent Position
+                            </Table.HeaderCell>
                             <Table.HeaderCell sorted={column === 'SegmentId' ? direction : null} onClick={this.handleSort('SegmentId')}>
                                 SegmentId
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {_.map(data, ({ AgentId, SegmentId, CompanyName, idcompanies }) => (
+                        {_.map(data, ({ AgentId, AgentFirstName, AgentLastName, AgentPosition, SegmentId, CompanyName, idcompanies }) => (
                             <Table.Row key={idcompanies}>
                                 <Table.Cell>{idcompanies}</Table.Cell>
                                 <Table.Cell>{CompanyName}</Table.Cell>
                                 <Table.Cell>{AgentId}</Table.Cell>
+                                <Table.Cell>{AgentFirstName}</Table.Cell>
+                                <Table.Cell>{AgentLastName}</Table.Cell>
+                                <Table.Cell>{AgentPosition}</Table.Cell>
                                 <Table.Cell>{SegmentId}</Table.Cell>
                             </Table.Row>
                         ))}

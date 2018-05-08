@@ -4,28 +4,24 @@ import { Form, Input, Button, Message, Transition, Dropdown } from 'semantic-ui-
 class CompanyForm extends Component {
     constructor(props) {
         super(props);
-        this.state = { companyName: '', agent: '', segmentId: '', visible: false };
+        this.state = { companyName: '', agentId: '', segmentId: '', visible: false };
 
         this.handleChangeCompanyName = this.handleChangeCompanyName.bind(this);
         this.handleChangeAgent = this.handleChangeAgent.bind(this);
-        this.handleChangeSegmentId = this.handleChangeSegmentId.bind(this);
+        this.handleChangeSegment = this.handleChangeSegment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.agentOptions = []
     }
 
     componentDidMount() {
-        fetch('http://:3001/getAgents', { method: 'GET' })
+        fetch('http://localhost:3001/getAgents', { method: 'GET' })
             .then((response) => { return response.json(); })
             .then((agents) => {
-                console.log(agents);
                 let agentOptions = [];
                 agents.forEach((agent) => {
-                    agentOptions.push({ key: agent.idagents, value: `${agent.AgentLastName}, ${agent.AgentFirstName}`, text: `${agent.AgentLastName}, ${agent.AgentFirstName}`, description: agent.idagents });
+                    agentOptions.push({ key: agent.idagents, value: agent.idagents, text: `${agent.AgentLastName}, ${agent.AgentFirstName}`, description: agent.idagents });
                 });
                 this.agentOptions = agentOptions;
-                this.setState({
-                    agentOptions
-                });
             });
     }
 
@@ -34,16 +30,15 @@ class CompanyForm extends Component {
     }
 
     handleChangeAgent(event, data) {
-        this.setState({ agent: data.value });
+        this.setState({ agentId: data.value });
     }
 
-    handleChangeSegmentId(event, data) {
+    handleChangeSegment(event, data) {
         this.setState({ segmentId: data.value });
     }
 
     handleSubmit(event) {
-        // alert('A name was submitted: ' + this.state.name + this.state.age + this.state.gender);
-        fetch('http://:3001/addCompany', { method: 'POST', body: JSON.stringify(this.state) })
+        fetch('http://localhost:3001/addCompany', { method: 'POST', body: JSON.stringify(this.state) })
             .then((response) => console.log(response));
         event.preventDefault();
         this.setState({ visible: true });
@@ -64,7 +59,7 @@ class CompanyForm extends Component {
                         </Form.Field>
                         <Form.Field>
                             <label>Segment ID</label>
-                            <Input fluid type="number" min="0" max="200" placeholder='Segment ID' value={this.state.segmentId} onChange={this.handleChangeSegmentId} />
+                            <Input fluid type="number" min="0" max="200" placeholder='Segment ID' value={this.state.segmentId} onChange={this.handleChangeSegment} />
                         </Form.Field>
                     </Form.Group>
                     <Button type="submit" value="Submit">Submit</Button>
